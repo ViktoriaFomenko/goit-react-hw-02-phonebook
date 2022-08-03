@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { nanoid } from 'nanoid';
 import { ContactForm } from './ContactForm/ContactForm';
 import { ContactList } from './ContactList/ContactList';
+import { Filter } from './Filter/Filter';
 
 export class App extends Component {
   state = {
@@ -11,6 +12,7 @@ export class App extends Component {
       { id: nanoid(), name: 'Eden Clements', number: '645-17-79' },
       { id: nanoid(), name: 'Annie Copeland', number: '227-91-26' },
     ],
+    filter: '',
   };
 
   addContact = ({ name, number }) => {
@@ -19,15 +21,36 @@ export class App extends Component {
       name,
       number,
     };
+    this.setState(prevState => ({
+      contacts: [contact, ...prevState.contacts],
+    }));
+  };
+
+  deleteContact = contactId => {
+    this.setState(prevState => ({
+      contacts: prevState.contacts.filter(contact => contact.id !== contactId),
+    }));
+  };
+
+  changeFilter = event => {
+    this.setState({ filter: event.currentTarget.value });
   };
 
   render() {
+    const normalizedFilter = this.state.filter.toLowerCase();
+    const visibleContacts = this.state.contacts.filter(contact =>
+      contact.name.toLowerCase().includes(normalizedFilter)
+    );
     return (
       <>
         <h1>Phonebook</h1>
         <ContactForm onSubmit={this.addContact} />
         <h2>Contacts</h2>
-        <ContactList contacts={this.contacts} />
+        <Filter value={this.state.filter} onChange={this.changeFilter} />
+        <ContactList
+          contacts={visibleContacts}
+          deleteContact={this.deleteContact}
+        />
       </>
     );
   }
