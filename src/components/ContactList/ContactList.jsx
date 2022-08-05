@@ -2,14 +2,15 @@ import PropTypes from 'prop-types';
 import css from './ContactList.module.css';
 import { ContactListItem } from 'components/ContactListItem/ContactListItem';
 
-export const ContactList = ({ contacts }) => {
+export const ContactList = ({ contacts, deleteContact }) => {
   return (
     <ul className={css.list}>
-      {contacts.map(contact => (
+      {contacts.map(({ id, name, number }) => (
         <ContactListItem
-          key={contact.id}
-          name={contact.name}
-          number={contact.number}
+          key={id}
+          name={name}
+          number={number}
+          deleteContact={() => deleteContact(id)}
         />
       ))}
     </ul>
