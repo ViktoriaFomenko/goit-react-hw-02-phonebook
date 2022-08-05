@@ -3,7 +3,6 @@ import { nanoid } from 'nanoid';
 import { ContactForm } from './ContactForm/ContactForm';
 import { ContactList } from './ContactList/ContactList';
 import { Filter } from './Filter/Filter';
-import { DuplicationName } from './DuplicationName';
 
 export class App extends Component {
   state = {
@@ -23,7 +22,11 @@ export class App extends Component {
       number,
     };
 
-    if ((<DuplicationName />)) {
+    const duplicationName = this.state.contacts.find(
+      contact => contact.name.toLowerCase() === name.toLowerCase()
+    );
+
+    if (duplicationName) {
       alert(`${name} is already in contacts.`);
     } else {
       this.setState(prevState => ({
